@@ -12,12 +12,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<TodoList> TodoLists => Set<TodoList>();
-
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+    public DbSet<Course> Courses => Set<Course>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+        builder.Entity<Course>(entity =>
+        {
+            entity.Property(e => e.Credits)
+                  .HasColumnType("decimal(18, 2)");
+        });
+
     }
 }

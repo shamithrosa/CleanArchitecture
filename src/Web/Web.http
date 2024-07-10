@@ -27,6 +27,12 @@ Cookie: {{AuthCookieName}}={{AuthCookieValue}}
 
 ###
 
+# GET Courses
+GET {{Web_HostAddress}}/api/Courses
+Cookie: {{AuthCookieName}}={{AuthCookieValue}}
+
+###
+
 # GET TodoLists
 GET {{Web_HostAddress}}/api/TodoLists
 Cookie: {{AuthCookieName}}={{AuthCookieValue}}

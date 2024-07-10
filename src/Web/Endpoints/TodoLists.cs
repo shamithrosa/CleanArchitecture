@@ -19,12 +19,14 @@ public class TodoLists : EndpointGroupBase
 
     public Task<TodosVm> GetTodoLists(ISender sender)
     {
-        return  sender.Send(new GetTodosQuery());
+        var result = sender.Send(new GetTodosQuery());
+        return result;
     }
 
     public Task<int> CreateTodoList(ISender sender, CreateTodoListCommand command)
     {
-        return sender.Send(command);
+        var result = sender.Send(command);
+        return result;
     }
 
     public async Task<IResult> UpdateTodoList(ISender sender, int id, UpdateTodoListCommand command)

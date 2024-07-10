@@ -44,6 +44,13 @@ Authorization: Bearer {{BearerToken}}
 
 ###
 
+# GET Courses
+GET {{Web_HostAddress}}/api/Courses
+Authorization: Bearer {{BearerToken}}
+
+
+###
+
 # GET TodoLists
 GET {{Web_HostAddress}}/api/TodoLists
 Authorization: Bearer {{BearerToken}}
