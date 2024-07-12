@@ -1,10 +1,6 @@
-﻿
-using CleanArchitecture.Application.Common.Models;
-using CleanArchitecture.Application.Courses.Commands;
+﻿using CleanArchitecture.Application.Courses.Commands;
 using CleanArchitecture.Application.Courses.Queries.GetCourses;
-using CleanArchitecture.Application.TodoItems.Commands.CreateTodoItem;
-using CleanArchitecture.Application.TodoItems.Queries.GetTodoItemsWithPagination;
-using CleanArchitecture.Application.TodoLists.Queries.GetTodos;
+using CleanArchitecture.Application.TodoLists.Commands.DeleteTodoList;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Web.Endpoints;
@@ -15,19 +11,35 @@ public class Courses : EndpointGroupBase
     {
         app.MapGroup(this)
             .RequireAuthorization()
+            .MapGet(GetAllCourses)
             .MapPost(CreateCourse)
-            .MapGet(GetAllCourses);
+            .MapPut(UpdateCourse, "{id}")
+            .MapDelete(DeleteCourse, "{id}");
     }
 
-    public Task<List<Course>> GetAllCourses(ISender sender)
+    public async Task<List<Course>> GetAllCourses(ISender sender)
     {
-        var result = sender.Send(new GetCoursesQuery());
+        return await sender.Send(new GetCoursesQuery());
+        //return result;
+    }
+
+    public async Task<int> CreateCourse(ISender sender, CreateCourseCommand command)
+    {
+        var result = await sender.Send(command);
         return result;
     }
 
-    public Task<int> CreateCourse(ISender sender, CreateCourseCommand command)
+    public async Task<IResult> UpdateCourse(ISender sender, int id, UpdateCourseCommand command)
     {
-        var result = sender.Send(command);
-        return result;
+        if (id != command.Id)
+            return Results.BadRequest();
+        await sender.Send(command);
+        return Results.NoContent();
+    }
+
+    public async Task<IResult> DeleteCourse(ISender sender, int id)
+    {
+        await sender.Send(new DeleteCourseCommand(id));
+        return Results.NoContent();
     }
 }

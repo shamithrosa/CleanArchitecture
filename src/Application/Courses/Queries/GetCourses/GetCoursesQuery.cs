@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CleanArchitecture.Application.Common.Interfaces;
-using CleanArchitecture.Application.TodoLists.Queries.GetTodos;
+﻿using CleanArchitecture.Application.Common.Interfaces;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.Courses.Queries.GetCourses;
@@ -22,9 +16,9 @@ public class GetCoursesQueryHandler : IRequestHandler<GetCoursesQuery, List<Cour
         _mapper = mapper;
     }
 
-    public Task<List<Course>> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
+    public async Task<List<Course>> Handle(GetCoursesQuery request, CancellationToken cancellationToken)
     {
-        var results = _context.Courses.OrderBy(x => x.CourseId).ToListAsync(cancellationToken);
+        var results = await _context.Courses.OrderBy(x => x.CourseId).ToListAsync(cancellationToken);
         return results;
     }
 }

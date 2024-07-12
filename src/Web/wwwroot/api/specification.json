@@ -7,6 +7,27 @@
   },
   "paths": {
     "/api/Courses": {
+      "get": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "GetAllCourses",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Course"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
           "Courses"
@@ -37,25 +58,64 @@
             }
           }
         }
-      },
-      "get": {
+      }
+    },
+    "/api/Courses/{id}": {
+      "put": {
         "tags": [
           "Courses"
         ],
-        "operationId": "GetAllCourses",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Course"
-                  }
-                }
+        "operationId": "UpdateCourse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCourseCommand"
               }
             }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Courses"
+        ],
+        "operationId": "DeleteCourse",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         }
       }
@@ -377,42 +437,6 @@
   },
   "components": {
     "schemas": {
-      "CreateCourseCommand": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "courseId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "courseName": {
-            "type": "string"
-          },
-          "description": {
-            "type": "string",
-            "nullable": true
-          },
-          "credits": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "category": {
-            "$ref": "#/components/schemas/CourseCategory"
-          }
-        }
-      },
-      "CourseCategory": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "undergraduate",
-          "postgraduate"
-        ],
-        "enum": [
-          1,
-          2
-        ]
-      },
       "Course": {
         "allOf": [
           {
@@ -442,6 +466,20 @@
               }
             }
           }
+        ]
+      },
+      "CourseCategory": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "undergraduate",
+          "postgraduate",
+          "certificate"
+        ],
+        "enum": [
+          1,
+          2,
+          3
         ]
       },
       "BaseAuditableEntity": {
@@ -495,6 +533,58 @@
         "type": "object",
         "x-abstract": true,
         "additionalProperties": false
+      },
+      "CreateCourseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "courseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CourseCategory"
+          }
+        }
+      },
+      "UpdateCourseCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "credits": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CourseCategory"
+          }
+        }
       },
       "PaginatedListOfTodoItemBriefDto": {
         "type": "object",

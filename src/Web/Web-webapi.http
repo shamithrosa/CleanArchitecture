@@ -44,11 +44,23 @@ Authorization: Bearer {{BearerToken}}
 
 ###
 
-# GET Courses
+# GET All Courses
 GET {{Web_HostAddress}}/api/Courses
 Authorization: Bearer {{BearerToken}}
+###
 
-
+# POST a Course
+POST {{Web_HostAddress}}/api/Courses
+Cookie: {{AuthCookieName}}={{AuthCookieValue}}
+Content-Type: application/json
+//CreateCourseCommand
+{
+  "CourseId": 101,
+  "CourseName":"Sample Course",
+  "Description":"Sample Description",
+  "Credits": 10,
+  "Category": 1
+}
 ###
 
 # GET TodoLists
