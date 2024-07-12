@@ -133,11 +133,11 @@ class CreateCourseCommand implements ICreateCourseCommand {
 
   init(_data?: any) {
     if (_data) {
-      this.courseId = _data["courseId"];
+      this.courseId = Number(_data["courseId"]);
       this.courseName = _data["courseName"];
       this.description = _data["description"];
-      this.credits = _data["credits"];
-      this.category = _data["category"];
+      this.credits = Number(_data["credits"]);
+      this.category = Number(_data["category"]);
     }
   }
 

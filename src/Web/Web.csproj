@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!--#if (!UseApiOnly)-->
-    <SpaRoot>ClientApp\</SpaRoot>
+    <SpaRoot>ClientApp-React\</SpaRoot>
     <SpaProxyServerUrl>https://localhost:44447</SpaProxyServerUrl>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <!--#endif-->

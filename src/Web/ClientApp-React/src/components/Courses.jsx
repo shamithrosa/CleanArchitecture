@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-//import { CourseServiceClient } from '../web-api-client.ts';
 import { CourseServiceClient } from "./../api/course-api-client.ts";
 import "./stylesheets/Course.css";
+import axios from "axios";
 
 const Courses = () => {
+  const [pageReload, setPageReload] = useState(false);
   const [courseList, setCourseList] = useState([]);
   const [displayCourse, setDisplayCourse] = useState({
     id: 0,
@@ -16,7 +17,7 @@ const Courses = () => {
 
   useEffect(() => {
     retrieveAllCourses();
-  }, []);
+  }, [pageReload]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -28,9 +29,26 @@ const Courses = () => {
 
   //retrieve all courses
   const retrieveAllCourses = async () => {
-    let client = new CourseServiceClient();
-    const data = await client.getAllCourses();
-    setCourseList(data);
+    /* Using API Client */
+
+    // let client = new CourseServiceClient();
+    // const data = await client.getAllCourses();
+    // setCourseList(data);
+
+    /* Using Axios */
+    axios
+      .get("https://localhost:44447/api/courses")
+      .then(function (response) {
+        // handle success
+        console.log(response);
+        if (response.data) {
+          setCourseList(response.data);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(function () {});
   };
 
   //load course data to the form
@@ -41,21 +59,84 @@ const Courses = () => {
 
   //on Adding a new record
   const onAddBtnClick = async () => {
-    let client = new CourseServiceClient();
-    let response = await client.createNewCourse(displayCourse);
+    /* Using API Client */
+    
+    // let client = new CourseServiceClient();
+    // let response = await client.createNewCourse(displayCourse);
+
+    /* Using Axios */
+    let obj = {
+      courseId: parseInt(displayCourse.courseId),
+      courseName: displayCourse.courseName,
+      description: displayCourse.description,
+      credits: parseFloat(displayCourse.credits),
+      category: parseInt(displayCourse.category),
+    };
+    const url = "https://localhost:44447/api/Courses";
+    axios
+      .post(url, obj)
+      .then((response) => {
+        console.log("Response:", response.data);
+        alert("Course Created");
+        onClearBtnClick();
+        setPageReload(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   };
 
   //on Updating record
-  const onUpdateBtnClick = () => {};
+  const onUpdateBtnClick = () => {
+    /* Using Axios */
+    let courseId = displayCourse.id;
+    const url = `https://localhost:44447/api/Courses/${courseId}`;
+
+    let obj = {
+      id: parseInt(displayCourse.id),
+      courseId: parseInt(displayCourse.courseId),
+      courseName: displayCourse.courseName,
+      description: displayCourse.description,
+      credits: parseFloat(displayCourse.credits),
+      category: parseInt(displayCourse.category),
+    };
+    axios
+      .put(url, obj)
+      .then((response) => {
+        console.log("Response:", response.data);
+        alert("Course Updated");
+        onClearBtnClick();
+        setPageReload(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   //on Deleteing a record
-  const onDeleteBtnClick = () => {};
+  const onDeleteBtnClick = () => {
+    const courseId = displayCourse.id;
+    const url = `https://localhost:44447/api/Courses/${courseId}`;
+
+    /* Using Axios */
+    axios
+      .delete(url)
+      .then((response) => {
+        console.log("Response:", response.data);
+        alert("Course Deleted");
+        onClearBtnClick();
+        setPageReload(true);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   //on Clearing the form
   const onClearBtnClick = () => {
     setDisplayCourse({
       id: null,
-      courseId: null,
+      courseId: 0,
       courseName: "",
       description: "",
       credits: 0,
