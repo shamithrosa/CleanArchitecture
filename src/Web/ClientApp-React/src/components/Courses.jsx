@@ -31,24 +31,25 @@ const Courses = () => {
   const retrieveAllCourses = async () => {
     /* Using API Client */
 
-    // let client = new CourseServiceClient();
-    // const data = await client.getAllCourses();
-    // setCourseList(data);
+    let client = new CourseServiceClient();
+    const data = await client.getAllCourses();
+    setCourseList(data);
 
     /* Using Axios */
-    axios
-      .get("https://localhost:44447/api/courses")
-      .then(function (response) {
-        // handle success
-        console.log(response);
-        if (response.data) {
-          setCourseList(response.data);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .finally(function () {});
+    // const baseUrl = window.location.origin;
+    // axios
+    //   .get(`${baseUrl}/api/courses`)
+    //   .then(function (response) {
+    //     // handle success
+    //     console.log(response);
+    //     if (response.data) {
+    //       setCourseList(response.data);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   })
+    //   .finally(function () {});
   };
 
   //load course data to the form
@@ -60,7 +61,6 @@ const Courses = () => {
   //on Adding a new record
   const onAddBtnClick = async () => {
     /* Using API Client */
-    
     // let client = new CourseServiceClient();
     // let response = await client.createNewCourse(displayCourse);
 
@@ -72,7 +72,8 @@ const Courses = () => {
       credits: parseFloat(displayCourse.credits),
       category: parseInt(displayCourse.category),
     };
-    const url = "https://localhost:44447/api/Courses";
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/api/Courses`;
     axios
       .post(url, obj)
       .then((response) => {
@@ -90,7 +91,8 @@ const Courses = () => {
   const onUpdateBtnClick = () => {
     /* Using Axios */
     let courseId = displayCourse.id;
-    const url = `https://localhost:44447/api/Courses/${courseId}`;
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/api/Courses/${courseId}`;
 
     let obj = {
       id: parseInt(displayCourse.id),
@@ -116,7 +118,8 @@ const Courses = () => {
   //on Deleteing a record
   const onDeleteBtnClick = () => {
     const courseId = displayCourse.id;
-    const url = `https://localhost:44447/api/Courses/${courseId}`;
+    const baseUrl = window.location.origin;
+    const url = `${baseUrl}/api/Courses/${courseId}`;
 
     /* Using Axios */
     axios
@@ -124,12 +127,12 @@ const Courses = () => {
       .then((response) => {
         console.log("Response:", response.data);
         alert("Course Deleted");
-        onClearBtnClick();
-        setPageReload(true);
       })
       .catch((error) => {
         console.error("Error:", error);
       });
+    onClearBtnClick();
+    setPageReload(true);
   };
 
   //on Clearing the form
@@ -235,15 +238,19 @@ const Courses = () => {
         <div className="course-list">
           <h5>Course List</h5>
           <ul className="list-group">
-            {courseList.map((x) => (
-              <li
-                key={x.courseId}
-                className="list-group-item list-group-item-light"
-                onClick={(evnt) => LoadCourseDetailsToForm(x, evnt)}
-              >
-                {x.courseName}
-              </li>
-            ))}
+            {courseList.length == 0 ? (
+              <li>No Data</li>
+            ) : (
+              courseList.map((x) => (
+                <li
+                  key={x.courseId}
+                  className="list-group-item list-group-item-light"
+                  onClick={(evnt) => LoadCourseDetailsToForm(x, evnt)}
+                >
+                  {x.courseName}
+                </li>
+              ))
+            )}
           </ul>
         </div>
       </div>

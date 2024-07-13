@@ -1,6 +1,5 @@
 ﻿using CleanArchitecture.Application.Courses.Commands;
 using CleanArchitecture.Application.Courses.Queries.GetCourses;
-using CleanArchitecture.Application.TodoLists.Commands.DeleteTodoList;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Web.Endpoints;
@@ -19,8 +18,7 @@ public class Courses : EndpointGroupBase
 
     public async Task<List<Course>> GetAllCourses(ISender sender)
     {
-        return await sender.Send(new GetCoursesQuery());
-        //return result;
+        return await sender.Send(new GetCoursesQuery());       
     }
 
     public async Task<int> CreateCourse(ISender sender, CreateCourseCommand command)

@@ -9,9 +9,9 @@ public static class TestDatabaseFactory
 #else
 #if DEBUG
         var database = new SqlServerTestDatabase();
-    #else
+#else
         var database = new TestcontainersTestDatabase();
-    #endif
+#endif
 #endif
 
         await database.InitialiseAsync();
